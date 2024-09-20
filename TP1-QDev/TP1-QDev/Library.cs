@@ -32,34 +32,40 @@ public class Library
     public bool EmprunterMedia(int numeroReference, string utilisateur)
     {
         var media = this[numeroReference];
-        if (media != null && media.NombreDExemplairesDisponibles > 0)
+        if (media == null)
         {
-            media -= 1;
-            Emprunts.Add(new Emprunt
-            {
-                NumeroDeReference = numeroReference,
-                Utilisateur = utilisateur,
-                DateEmprunt = DateTime.Now
-            });
-            return true;
+            throw new MediaNotAvailableException($"Le média avec le numéro de référence {numeroReference} n'a pas été trouvé.");
         }
-        return false;
+        if (media.NombreDExemplairesDisponibles <= 0)
+        {
+            throw new MediaNotAvailableException($"Le média avec le numéro de référence {numeroReference} n'est pas disponible pour l'emprunt.");
+        }
+
+        media -= 1;
+        Emprunts.Add(new Emprunt
+        {
+            NumeroDeReference = numeroReference,
+            Utilisateur = utilisateur,
+            DateEmprunt = DateTime.Now
+        });
+        return true;
     }
 
     public bool RetournerMedia(int numeroReference, string utilisateur)
     {
         var media = this[numeroReference];
-        if (media != null)
+        if (media == null)
         {
-            media += 1;
-            var emprunt = Emprunts.FirstOrDefault(e => e.NumeroDeReference == numeroReference && e.Utilisateur == utilisateur);
-            if (emprunt != null)
-            {
-                Emprunts.Remove(emprunt);
-            }
-            return true;
+            throw new MediaNotFoundException($"Le média avec le numéro de référence {numeroReference} n'a pas été trouvé.");
         }
-        return false;
+
+        media += 1;
+        var emprunt = Emprunts.FirstOrDefault(e => e.NumeroDeReference == numeroReference && e.Utilisateur == utilisateur);
+        if (emprunt != null)
+        {
+            Emprunts.Remove(emprunt);
+        }
+        return true;
     }
     public List<Media> RechercherMedia(Func<Media, bool> critere)
     {

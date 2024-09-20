@@ -23,14 +23,18 @@ public class ProgrammePrincipal
             {
                 Console.WriteLine("Emprunt réussi pour le média avec le numéro de référence 1.");
             }
-            else
-            {
-                Console.WriteLine("Échec de l'emprunt pour le média avec le numéro de référence 1.");
-            }
+        }
+        catch (MediaNotFoundException ex)
+        {
+            Console.WriteLine($"Erreur: {ex.Message}");
+        }
+        catch (MediaNotAvailableException ex)
+        {
+            Console.WriteLine($"Erreur: {ex.Message}");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Erreur lors de l'emprunt: {ex.Message}");
+            Console.WriteLine($"Erreur inattendue lors de l'emprunt: {ex.Message}");
         }
 
         // Retourner des médias
@@ -40,14 +44,14 @@ public class ProgrammePrincipal
             {
                 Console.WriteLine("Retour réussi pour le média avec le numéro de référence 1.");
             }
-            else
-            {
-                Console.WriteLine("Échec du retour pour le média avec le numéro de référence 1.");
-            }
+        }
+        catch (MediaNotFoundException ex)
+        {
+            Console.WriteLine($"Erreur: {ex.Message}");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Erreur lors du retour: {ex.Message}");
+            Console.WriteLine($"Erreur inattendue lors du retour: {ex.Message}");
         }
 
         // Afficher les informations des médias après les opérations d'emprunt et de retour
@@ -60,18 +64,33 @@ public class ProgrammePrincipal
         }
 
         // Sauvegarder la bibliothèque
-        string filePath = "bibliotheque.json";
-        library.SauvegarderBibliotheque(filePath);
-        Console.WriteLine("Bibliothèque sauvegardée.");
+        try
+        {
+            string filePath = "bibliotheque.json";
+            library.SauvegarderBibliotheque(filePath);
+            Console.WriteLine("Bibliothèque sauvegardée.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erreur lors de la sauvegarde de la bibliothèque: {ex.Message}");
+        }
 
         // Charger la bibliothèque
-        Library loadedLibrary = Library.ChargerBibliotheque(filePath);
-        Console.WriteLine("Bibliothèque chargée.");
-
-        // Afficher les informations de chaque média dans la bibliothèque chargée
-        foreach (var media in loadedLibrary.Medias)
+        try
         {
-            media.AfficherInfos();
+            string filePath = "bibliotheque.json";
+            Library loadedLibrary = Library.ChargerBibliotheque(filePath);
+            Console.WriteLine("Bibliothèque chargée.");
+
+            // Afficher les informations de chaque média dans la bibliothèque chargée
+            foreach (var media in loadedLibrary.Medias)
+            {
+                media.AfficherInfos();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erreur lors du chargement de la bibliothèque: {ex.Message}");
         }
     }
 }
