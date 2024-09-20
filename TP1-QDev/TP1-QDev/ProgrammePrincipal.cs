@@ -4,22 +4,20 @@ public class ProgrammePrincipal
 {
     public static void Main(string[] args)
     {
-        Library library = new Library();
+        Library librairie = new Library();
 
         Media livre1 = new Media { Titre = "Livre 1", NumeroDeReference = 1, NombreDExemplairesDisponibles = 5 };
         Media livre2 = new Media { Titre = "Livre 2", NumeroDeReference = 2, NombreDExemplairesDisponibles = 3 };
 
-        // Ajout de médias à la bibliothèque en utilisant l'opérateur +
-        library.AjouterMedia(livre1 + 2); // Ajoute 2 exemplaires supplémentaires de livre1
-        library.AjouterMedia(livre2 + 1); // Ajoute 1 exemplaire supplémentaire de livre2
-
-        // Afficher les informations des médias dans la bibliothèque
-        library.AfficherStatistiques();
+        // Ajout de médias à la bibliothèque
+        librairie.AjouterMedia(livre1 + 2);
+        librairie.AjouterMedia(livre2 + 1);
+        librairie.AfficherStatistiques();
 
         // Emprunter des médias
         try
         {
-            if (library.EmprunterMedia(1, "Utilisateur1"))
+            if (librairie.EmprunterMedia(1, "Utilisateur1"))
             {
                 Console.WriteLine("Emprunt réussi pour le média avec le numéro de référence 1.");
             }
@@ -40,7 +38,7 @@ public class ProgrammePrincipal
         // Retourner des médias
         try
         {
-            if (library.RetournerMedia(1, "Utilisateur1"))
+            if (librairie.RetournerMedia(1, "Utilisateur1"))
             {
                 Console.WriteLine("Retour réussi pour le média avec le numéro de référence 1.");
             }
@@ -53,12 +51,11 @@ public class ProgrammePrincipal
         {
             Console.WriteLine($"Erreur inattendue lors du retour: {ex.Message}");
         }
+        
+        librairie.AfficherStatistiques();
 
-        // Afficher les informations des médias après les opérations d'emprunt et de retour
-        library.AfficherStatistiques();
-
-        // Afficher les informations de chaque média dans la bibliothèque
-        foreach (var media in library.Medias)
+        // Afficher les informations de chaque média
+        foreach (var media in librairie.Medias)
         {
             media.AfficherInfos();
         }
@@ -67,7 +64,7 @@ public class ProgrammePrincipal
         try
         {
             string filePath = "bibliotheque.json";
-            library.SauvegarderBibliotheque(filePath);
+            librairie.SauvegarderBibliotheque(filePath);
             Console.WriteLine("Bibliothèque sauvegardée.");
         }
         catch (Exception ex)
