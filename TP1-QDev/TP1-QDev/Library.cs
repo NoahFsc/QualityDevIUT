@@ -1,4 +1,5 @@
-﻿namespace TP1_QDev;
+﻿using System.Text.Json;
+namespace TP1_QDev;
 
 public class Library
 {
@@ -80,5 +81,17 @@ public class Library
         Console.WriteLine($"Nombre total de médias: {totalMedias}");
         Console.WriteLine($"Nombre total d'exemplaires disponibles: {totalExemplairesDisponibles}");
         Console.WriteLine($"Nombre total d'exemplaires empruntés: {totalExemplairesEmpruntes}");
+    }
+    public void SauvegarderBibliotheque(string cheminFichier)
+    {
+        var options = new JsonSerializerOptions { WriteIndented = true };
+        var jsonString = JsonSerializer.Serialize(this, options);
+        File.WriteAllText(cheminFichier, jsonString);
+    }
+
+    public static Library ChargerBibliotheque(string cheminFichier)
+    {
+        var jsonString = File.ReadAllText(cheminFichier);
+        return JsonSerializer.Deserialize<Library>(jsonString);
     }
 }
